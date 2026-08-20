@@ -952,6 +952,7 @@ snd.addEventListener('click',function(e){
   try{ l=new URLSearchParams(location.search).get("lang"); }catch(e){}
   if(l!=="uz"&&l!=="ru"&&l!=="en"){ l=null; try{ l=localStorage.getItem("bipLang"); }catch(e){} }
   if(l!=="uz"&&l!=="ru"&&l!=="en") l="uz";
+  try{ localStorage.setItem("bipLang", l); }catch(e){}   /* язык из index.html запоминаем */
   document.getElementById("pghead-name").textContent=T[l];
   document.getElementById("pghead-org").textContent=O[l];
 })();
