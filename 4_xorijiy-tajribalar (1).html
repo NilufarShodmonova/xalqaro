@@ -961,7 +961,11 @@ snd.addEventListener('click',function(e){
   var b=document.getElementById('mainbtn');
   document.getElementById('mainbtn-t').textContent=L[l];
   b.setAttribute('href','index.html?menu=1&lang='+l);
-  b.addEventListener('click',function(e){ e.stopPropagation(); });
+  b.addEventListener('click',function(e){
+    e.stopPropagation(); e.preventDefault();
+    var u=this.getAttribute('href');
+    setTimeout(function(){ location.href=u; },150);   /* пауза, чтобы прозвучал клик */
+  });
 })();
 </script>
 <div id="navbtns">
@@ -986,6 +990,40 @@ snd.addEventListener('click',function(e){
     e.stopPropagation(); key('ArrowRight'); keepPlaying();
   });
   if(deck) deck.addEventListener('click',keepPlaying);   /* тап по слайду тоже не «замораживает» показ */
+})();
+</script>
+<script>
+/* ---- звук нажатия для всех кликов: синтез WebAudio, без аудиофайлов (работает офлайн) ---- */
+(function(){
+  var on = true;
+  try{ on = new URLSearchParams(location.search).get('sound') !== 'off'; }catch(e){}
+  var ac = null;
+  function ctx(){
+    try{
+      if(!ac){ var A = window.AudioContext || window.webkitAudioContext; if(!A) return null; ac = new A(); }
+      if(ac.state === 'suspended') ac.resume();
+    }catch(e){ return null; }
+    return ac;
+  }
+  function tick(){
+    if(!on) return;
+    var c = ctx(); if(!c) return;
+    try{
+      var t = c.currentTime;
+      var o = c.createOscillator(), g = c.createGain();
+      o.type = 'sine';
+      o.frequency.setValueAtTime(1500, t);
+      o.frequency.exponentialRampToValueAtTime(620, t + 0.06);
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.linearRampToValueAtTime(0.13, t + 0.006);
+      g.gain.exponentialRampToValueAtTime(0.0004, t + 0.13);
+      o.connect(g); g.connect(c.destination);
+      o.start(t); o.stop(t + 0.15);
+    }catch(e){}
+  }
+  window.tpClick = tick;
+  document.addEventListener('pointerdown', tick, true);
+  document.addEventListener('keydown', function(e){ if(e.key === ' ' || e.key === 'Enter') tick(); }, true);
 })();
 </script>
 </body>
