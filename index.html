@@ -120,6 +120,7 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 .tp-splash__mid{
   flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
   gap:1rem;animation:tp-fade-up 1s .45s both;
+  position:relative;top:-3.125rem;      /* заголовок выше на 50px */
 }
 .tp-hero{
   font-family:var(--tp-display);
@@ -190,6 +191,12 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
   color:var(--tp-text-dim);line-height:1.5;margin-top:.35rem;
 }
 .tp-head__tools{display:flex;align-items:center;gap:.9rem;flex:0 0 auto}
+/* язык и «домой» — по центру внизу экрана меню */
+.tp-menu__tools{
+  position:absolute;left:0;right:0;bottom:2.6rem;   /* прижаты к низу экрана */
+  display:flex;align-items:center;justify-content:center;gap:1rem;
+  animation:tp-fade-up .9s .55s both;
+}
 
 .tp-pill{
   padding:.7rem 1.4rem;border:1px solid var(--tp-line);border-radius:.5rem;
@@ -210,8 +217,8 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 /* ============ ЭКРАН 2 — МЕНЮ ============ */
 #tp-menu{padding:0}
 .tp-menu__body{
-  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
-  gap:0;padding:1.6rem 5rem 3rem;min-height:0;
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:2.2rem;padding:1.6rem 5rem 7rem;min-height:0;
 }
 .tp-menu__title{
   font-family:var(--tp-display);
@@ -219,8 +226,7 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
   color:var(--tp-sand);text-align:center;line-height:1.2;
   text-shadow:0 .2rem .8rem rgba(0,0,0,.7);
   animation:tp-fade-down .7s both;
-  /* заголовок центрируется по высоте свободного пространства */
-  flex:1 1 auto;width:100%;min-height:0;
+  flex:0 0 auto;width:100%;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
 }
 .tp-menu__sub{
@@ -229,21 +235,15 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
   margin-top:.9rem;
 }
 .tp-grid{
-  display:grid;grid-template-columns:repeat(6,1fr);gap:1.8rem;
-  width:100%;max-width:92rem;align-items:stretch;justify-content:center;
-  margin-top:auto;flex:0 0 auto;
+  display:grid;grid-template-columns:repeat(5,1fr);gap:1.8rem;
+  width:100%;max-width:104rem;align-items:stretch;justify-content:center;
+  margin:0 auto;flex:0 0 auto;
 }
-/* 2 карточки сверху, 3 снизу */
-.tp-grid > .tp-card:nth-child(1),
-.tp-grid > .tp-card:nth-child(2){grid-column:span 3}
-.tp-grid > .tp-card:nth-child(3),
-.tp-grid > .tp-card:nth-child(4),
-.tp-grid > .tp-card:nth-child(5){grid-column:span 2}
 .tp-card{
   position:relative;overflow:hidden;height:100%;
   display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
-  gap:.9rem;padding:1.8rem 1.3rem 1.8rem;
-  min-height:17.5rem;
+  gap:.9rem;padding:1.8rem 1.2rem 1.8rem;
+  min-height:19rem;
   background:linear-gradient(170deg,rgba(22,41,74,.86) 0%,rgba(11,21,38,.94) 100%);
   border:1px solid var(--tp-line);border-radius:1.2rem;
   box-shadow:var(--tp-shadow);
@@ -282,7 +282,7 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
   max-width:100%;
   font-size:1.12rem;line-height:1.32;letter-spacing:.05em;   /* < 20px */
   color:var(--tp-gold-hi);text-transform:uppercase;
-  hyphens:auto;
+  hyphens:manual;                                             /* без переносов по слогам */
   display:flex;align-items:center;justify-content:center;flex:1 1 auto;
 }
 .tp-card__years{display:block;font-size:.68em;letter-spacing:.22em;opacity:.72;margin-top:.45em;font-weight:400}
@@ -371,14 +371,6 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
         <div class="tp-welcome" id="tp-head-welcome">XUSH KELIBSIZ</div>
         <div class="tp-head__org" id="tp-head-org"></div>
       </div>
-      <div class="tp-head__tools">
-        <button class="tp-pill" data-lang="uz">UZ</button>
-        <button class="tp-pill" data-lang="ru">RU</button>
-        <button class="tp-pill" data-lang="en">EN</button>
-        <button class="tp-icobtn" id="tp-home" title="Home">
-          <svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg>
-        </button>
-      </div>
     </header>
 
     <div class="tp-menu__body">
@@ -387,6 +379,14 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
         <div class="tp-menu__sub" id="tp-menu-sub"></div>
       </div>
       <div class="tp-grid" id="tp-grid"></div>
+      <div class="tp-menu__tools">
+        <button class="tp-pill" data-lang="uz">UZ</button>
+        <button class="tp-pill" data-lang="ru">RU</button>
+        <button class="tp-pill" data-lang="en">EN</button>
+        <button class="tp-icobtn" id="tp-home" title="Home">
+          <svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg>
+        </button>
+      </div>
     </div>
   </section>
 
