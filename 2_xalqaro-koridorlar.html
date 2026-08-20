@@ -404,6 +404,31 @@ body.light #dots i.on{background:var(--gl)!important}
 }
 
 </style>
+<style>
+/* переключатель языка и кнопка play скрыты: язык приходит из меню (?lang=) */
+#lang,#play{display:none!important}
+
+/* ---- поля сверху и снизу: кадр не касается верхней полосы и точек навигации ---- */
+.vis,.num,.fig,.vidwrap,.rmap,.mapwrap{inset:2.8vh 0 7.2vh 0}
+.cap{padding-bottom:4vh}
+.fig .cap{padding-bottom:3.4vh}
+#cnt{bottom:1.8vh}
+.cr{bottom:8.8vh}
+
+/* ---- кнопки «назад / вперёд» в правом нижнем углу ---- */
+#navbtns{position:fixed;right:2.2vw;bottom:1.1vh;z-index:40;display:flex;gap:.7rem;pointer-events:auto}
+#navbtns button{width:clamp(44px,3.4vw,60px);height:clamp(44px,3.4vw,60px);
+ border-radius:50%;border:1.5px solid var(--line);background:rgba(10,19,32,.62);color:var(--gp);
+ display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;
+ backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+ transition:border-color .25s, transform .18s, background .25s}
+#navbtns button:hover{border-color:var(--g);background:rgba(201,151,63,.14)}
+#navbtns button:active{transform:scale(.93)}
+#navbtns svg{width:42%;height:42%;fill:none;stroke:currentColor;stroke-width:2.4;
+ stroke-linecap:round;stroke-linejoin:round}
+body.light #navbtns button{color:var(--ink);background:rgba(255,252,244,.62);border-color:rgba(90,70,40,.3)}
+@media (max-aspect-ratio:1/1){#navbtns{right:5vw;bottom:1.6vh;gap:1rem}}
+</style>
 </head>
 <body>
 <div id="bar"></div>
@@ -865,6 +890,30 @@ new MutationObserver(function(){ clearTimeout(tmr); tmr=setTimeout(sync,50); })
 setTimeout(sync,700);
 })();
 
+</script>
+<div id="navbtns">
+  <button id="prevb" aria-label="Oldingi / Назад / Previous"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+  <button id="nextb" aria-label="Keyingi / Вперёд / Next"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+</div>
+<script>
+/* кнопки листания: используют уже существующую навигацию слайдера
+   и возвращают автопрокрутку (кнопка play скрыта) */
+(function(){
+  var deck=document.getElementById('deck');
+  function key(k){ dispatchEvent(new KeyboardEvent('keydown',{key:k,bubbles:true})); }
+  function keepPlaying(){
+    setTimeout(function(){
+      if(document.querySelector('#pi path')) key(' ');   /* сейчас пауза — снова запускаем */
+    },80);
+  }
+  document.getElementById('prevb').addEventListener('click',function(e){
+    e.stopPropagation(); key('ArrowLeft'); keepPlaying();
+  });
+  document.getElementById('nextb').addEventListener('click',function(e){
+    e.stopPropagation(); key('ArrowRight'); keepPlaying();
+  });
+  if(deck) deck.addEventListener('click',keepPlaying);   /* тап по слайду тоже не «замораживает» показ */
+})();
 </script>
 </body>
 </html>
