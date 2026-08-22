@@ -1056,6 +1056,14 @@ setTimeout(sync,700);
 </script>
 
 <style>
+/* ---- слайды направлений (4–7): текстовый блок направлений и метка опущены на 20% ---- */
+.rmap .cap{transform:translateY(20%)}
+.sl:has(.rmap) .era{top:17.4vh}
+/* слайд 3 (карта с кнопками направлений): панель с кнопками и метка тоже ниже */
+.mapbar{transform:translateY(20%)}
+.sl:has(.mapwrap) .era{top:17.4vh}
+</style>
+<style>
 /* ================= ВИДЕОГАЛЕРЕЯ (слайд со списком видео) ================= */
 .vidgal .galwrap{position:absolute;inset:10.4vh 0 11vh 0;z-index:2;
  display:flex;flex-direction:column;align-items:center;justify-content:center;
